@@ -1,8 +1,9 @@
-import { Text, View, StyleSheet,TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Pressable } from 'react-native';
 import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
 import { useNavigation } from '@react-navigation/native';
-
-
+import CopyrightNotice from '../../components/Copyright/Copyright'
+import Logout from '../../components/Logout/Logout'
+import UserProfile from '../../components/UserProfile/UserProfile'
 
 const Home = () => {
   const navigation = useNavigation();
@@ -11,8 +12,8 @@ const Home = () => {
     navigation.navigate('Expense');
   };
 
-  const handleSaldosPress = () => {
-    navigation.navigate('Saldos');
+  const handleBalancePress = () => {
+    navigation.navigate('Balance');
   };
 
   const handleCadastrosPress = () => {
@@ -26,20 +27,25 @@ const Home = () => {
       </View>
 
       <View>
-        <TouchableOpacity style={styles.button}
-        onPress={handleExpensePress}
-         >
+        <Pressable style={styles.button} onPress={handleExpensePress}  role="button">
           <Text style={styles.buttonText}>Despesas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Saldos ( Em desenvolvimento)</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Cadastros(Em desenvolvimento)</Text>
-        </TouchableOpacity>
+        </Pressable>
+        <Pressable style={styles.button} onPress={handleBalancePress}  role="button">
+          <Text style={styles.buttonText}>Saldos</Text>
+        </Pressable>
+        <Pressable style={styles.button} onPress={handleCadastrosPress}  role="button">
+          <Text style={styles.buttonText}>(Em desenvolvimento)</Text>
+        </Pressable>
       </View>
       <View>
         <BalanceScreen></BalanceScreen>
+        <CopyrightNotice></CopyrightNotice>
+      </View>
+      <View>
+        <Logout></Logout>
+      </View>
+      <View>
+        < UserProfile></UserProfile>
       </View>
     </>
 
@@ -75,9 +81,9 @@ const styles = StyleSheet.create({
 
 
   buttonText: {
-  color: '#fff',
-  fontSize: 18,
-},
+    color: '#fff',
+    fontSize: 18,
+  },
 
 })
 

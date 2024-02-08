@@ -3,36 +3,37 @@ import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
 import { useNavigation } from '@react-navigation/native';
 import CopyrightNotice from '../../components/Copyright/Copyright'
 
-const Expense = () => {
+
+const Balance = () => {
   const navigation = useNavigation();
 
-  const handleAddExpensePress = () => {
-    navigation.navigate('AddExpense');
+  const handleAddBalancePress = () => {
+    navigation.navigate('AddBalance');
   };
-  const handleAddExpenseListPress = () => {
-    navigation.navigate('ExpenseList');
+  const handleBalanceHistoryPress = () => {
+    navigation.navigate('BalanceHistory');
   };
 
   return (
     <>
       <View style={styles.ContainerHome}>
-        <Text style={styles.TextTitle}>Despesas </Text>
+        <Text style={styles.TextTitle}>Saldos </Text>
       </View>
 
       <View>
         <Pressable
           style={styles.button}
-          onPress={handleAddExpensePress}
+          onPress={handleAddBalancePress}
           role="button" // Adicionando role para acessibilidade
         >
-          <Text style={styles.buttonText}>Lançar Nova Despesa</Text>
+          <Text style={styles.buttonText}>Lancar Saldo</Text>
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={handleAddExpenseListPress}
+          onPress={handleBalanceHistoryPress}
           role="button" // Adicionando role para acessibilidade
         >
-          <Text style={styles.buttonText}>Pagar Despesas</Text>
+          <Text style={styles.buttonText}>Historico saldos</Text>
         </Pressable>
       </View>
       <View>
@@ -70,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Expense;
+export default Balance;

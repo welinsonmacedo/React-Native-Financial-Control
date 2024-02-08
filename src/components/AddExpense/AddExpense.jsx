@@ -32,7 +32,7 @@ const AddExpense = () => {
       setDueDate('');
       setAmount('');
 
-      Alert.alert('Success', 'Expense added successfully!');
+      alert('Despesa adicionado com sucesso!');
     } catch (error) {
       console.error('Error adding expense: ', error);
       Alert.alert('Error', 'An error occurred while adding the expense. Please try again.');
@@ -41,7 +41,7 @@ const AddExpense = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Lançar Despesas</Text>
+      <Text>Lançar Despesa</Text>
       <TextInput
         placeholder="Despesa"
         style={styles.input}
