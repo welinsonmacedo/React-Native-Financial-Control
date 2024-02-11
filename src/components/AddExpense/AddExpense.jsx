@@ -1,14 +1,35 @@
-// Import necessary libraries
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db, auth } from '../../services/firebaseConfig'; // Import your Firestore and Authentication configurations
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, Alert, Picker, TextInput } from 'react-native';
+import { addDoc, collection, serverTimestamp, getDocs } from 'firebase/firestore';
+import { db, auth } from '../../services/firebaseConfig';
+
+
+//Components//
+import DateInput from '../DateInput/DateInput'; 
+import CurrencyInput from '../CurrencyInput/CurrencyInput';
+import ButtonsAll from '../../components/Buttons/ButtonsALL';
+import Title from '../Title/Title';
+import HeaderTitle from '../HeaderTitle/HeaderTitle';
+
+
+
 
 const AddExpense = () => {
   const [expense, setExpense] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [amount, setAmount] = useState('');
+  const [despesaNames, setDespesaNames] = useState([]);
   const user = auth.currentUser;
+
+  useEffect(() => {
+    const fetchDespesaNames = async () => {
+      const querySnapshot = await getDocs(collection(db, 'DespesaName'));
+      const names = querySnapshot.docs.map(doc => doc.data().nome);
+      setDespesaNames(names);
+    };
+
+    fetchDespesaNames();
+  }, []);
 
   const handleAddExpense = async () => {
     try {
@@ -17,70 +38,74 @@ const AddExpense = () => {
         return;
       }
 
-      // Add a new expense to the Firestore collection with the user ID
       await addDoc(collection(db, 'Despesas'), {
         dataAtual: serverTimestamp(),
-        paid: '',
+        paid: false,
         despesa: expense,
         dataVencimento: dueDate,
         valor: amount,
-        userId: user.uid, // Include the user ID
+        userId: user.uid,
       });
 
-      // Clear input fields after adding expense
       setExpense('');
-      setDueDate('');
+      setDueDate(new Date());
       setAmount('');
 
-      alert('Despesa adicionado com sucesso!');
+      Alert.alert('Sucesso', 'Despesa adicionada com sucesso!');
     } catch (error) {
       console.error('Error adding expense: ', error);
-      Alert.alert('Error', 'An error occurred while adding the expense. Please try again.');
+      Alert.alert('Erro', 'Ocorreu um erro ao adicionar a despesa. Por favor, tente novamente.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text>Lançar Despesa</Text>
-      <TextInput
-        placeholder="Despesa"
-        style={styles.input}
-        value={expense}
-        onChangeText={(text) => setExpense(text)}
+      <HeaderTitle
+     title={''} 
       />
-      <TextInput
-        placeholder="Data Vencimento"
-        style={styles.input}
-        value={dueDate}
-        onChangeText={(text) => setDueDate(text)}
-        keyboardType="numeric"
-        type="date"
+      <Title 
+      text={'Lançar Despesas'}
       />
-      <TextInput
-        placeholder="Valor"
+      <Text>Categoria Despesa</Text>
+      <Picker
+        selectedValue={expense}
         style={styles.input}
+        onValueChange={(itemValue, itemIndex) => setExpense(itemValue)}
+      >
+        {despesaNames.map((name, index) => (
+          <Picker.Item key={index} label={name} value={name} />
+        ))}
+      </Picker>
+      <Text>Data Vencimento</Text>
+      <DateInput
+        date={dueDate}
+        onChange={setDueDate}
+      />
+      <Text>Valor</Text>
+      <CurrencyInput
         value={amount}
-        onChangeText={(text) => setAmount(text)}
-        keyboardType="numeric"
+        onChange={(setAmount)}
       />
-      <Button title="Adicionar Despesa" onPress={handleAddExpense} />
+      <ButtonsAll 
+        title={'Adicionar Despesa'}
+        onPress={handleAddExpense}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width:'100%',
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 10,
-    width: 300,
+    paddingHorizontal: 10,
+    width: 200,
   },
 });
 

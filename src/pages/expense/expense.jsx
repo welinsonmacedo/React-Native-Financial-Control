@@ -1,7 +1,12 @@
 import { Text, View, StyleSheet, Pressable } from 'react-native';
-import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
 import { useNavigation } from '@react-navigation/native';
+
+//Components//
 import CopyrightNotice from '../../components/Copyright/Copyright'
+import ButtonsAll from '../../components/Buttons/ButtonsALL';
+import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
+import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
+import Title from '../../components/Title/Title'
 
 const Expense = () => {
   const navigation = useNavigation();
@@ -12,62 +17,23 @@ const Expense = () => {
   const handleAddExpenseListPress = () => {
     navigation.navigate('ExpenseList');
   };
+  const handlePaidExpensesListPress = () => {
+    navigation.navigate('PaidExpensesList');
+  };
 
   return (
     <>
-      <View style={styles.ContainerHome}>
-        <Text style={styles.TextTitle}>Despesas </Text>
-      </View>
-
-      <View>
-        <Pressable
-          style={styles.button}
-          onPress={handleAddExpensePress}
-          role="button" // Adicionando role para acessibilidade
-        >
-          <Text style={styles.buttonText}>Lançar Nova Despesa</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={handleAddExpenseListPress}
-          role="button" // Adicionando role para acessibilidade
-        >
-          <Text style={styles.buttonText}>Pagar Despesas</Text>
-        </Pressable>
-      </View>
-      <View>
-        <BalanceScreen></BalanceScreen>
-        <CopyrightNotice></CopyrightNotice>
-      </View>
+      <HeaderTitle title='' />
+      <Title text={'Despesas'} />
+      <ButtonsAll onPress={handleAddExpensePress} title={'Lançar Nova Despesa'} />
+      <ButtonsAll onPress={handleAddExpenseListPress} title={'Pagar Despesas'} />
+      <ButtonsAll onPress={handlePaidExpensesListPress} title={'Despesas Pagas'} />
+      <BalanceScreen></BalanceScreen>
+      <CopyrightNotice></CopyrightNotice>
     </>
   );
 };
 
-const styles = StyleSheet.create({
-  ContainerHome: {
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  TextTitle: {
-    fontWeight: '800',
-    color: '#fff',
-    fontSize: 30,
-    marginBottom: 10,
-    padding: 10,
-  },
-  button: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-});
+
 
 export default Expense;

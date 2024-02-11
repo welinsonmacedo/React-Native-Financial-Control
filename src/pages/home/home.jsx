@@ -1,12 +1,27 @@
-import { Text, View, StyleSheet, Pressable } from 'react-native';
-import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import CopyrightNotice from '../../components/Copyright/Copyright'
+
+
+//Components//
+
 import Logout from '../../components/Logout/Logout'
 import UserProfile from '../../components/UserProfile/UserProfile'
+import SettingsButton from '../../components/Buttons/SettingsButton';
+import ExpenseScreen from '../../components/ExpenseScreen/ExpenseScreen';
+import ButtonsAll from '../../components/Buttons/ButtonsALL';
+import CopyrightNotice from '../../components/Copyright/Copyright'
+import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
+import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
+import Title from '../../components/Title/Title';
+/////////////////////
+
 
 const Home = () => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(false);
+
+
 
   const handleExpensePress = () => {
     navigation.navigate('Expense');
@@ -19,33 +34,30 @@ const Home = () => {
   const handleCadastrosPress = () => {
     navigation.navigate('Cadastros');
   };
+
   return (
     <>
-      <View style={styles.ContainerHome}>
+      <HeaderTitle title={''} />
+      <Title text={'GerenteFinanceiro '} />
+      <SettingsButton />
+      <View style={styles.ContainerMain}>
+        <ButtonsAll onPress={handleExpensePress} title={'Despesas'} />
 
-        <Text style={styles.TextTitle}>Caixa Eficiente </Text>
+        <ButtonsAll onPress={handleBalancePress} title={'Receitas'} />
+
       </View>
 
       <View>
-        <Pressable style={styles.button} onPress={handleExpensePress}  role="button">
-          <Text style={styles.buttonText}>Despesas</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={handleBalancePress}  role="button">
-          <Text style={styles.buttonText}>Saldos</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={handleCadastrosPress}  role="button">
-          <Text style={styles.buttonText}>(Em desenvolvimento)</Text>
-        </Pressable>
+
+        <BalanceScreen />
+        <ExpenseScreen />
+        <CopyrightNotice />
       </View>
       <View>
-        <BalanceScreen></BalanceScreen>
-        <CopyrightNotice></CopyrightNotice>
+        <Logout />
       </View>
       <View>
-        <Logout></Logout>
-      </View>
-      <View>
-        < UserProfile></UserProfile>
+        < UserProfile />
       </View>
     </>
 
@@ -54,37 +66,16 @@ const Home = () => {
 }
 const styles = StyleSheet.create({
 
-  ContainerHome: {
-    backgroundColor: 'green',
+  ContainerMain: {
+    flexDirection: 'row',
+    width: '100%',
+    gap: 30,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  TextTitle: {
-    fontWeight: '800',
-    color: '#fff',
-    fontSize: 30,
-    marginBottom: 10,
-    padding: 10,
-  },
-  ButtonHome: {
-    backgroundColor: 'black',
-    padding: 10,
-  },
-  button: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
+    padding: 20,
+  }
 
 
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
+});
 
-})
 
 export default Home

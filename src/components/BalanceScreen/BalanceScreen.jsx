@@ -8,7 +8,7 @@ const BalanceSummary = () => {
   const [expensesTotal, setExpensesTotal] = useState(0);
 
   useEffect(() => {
-    // Function to fetch balances
+    
     const fetchBalances = async () => {
       try {
         if (!auth.currentUser) {
@@ -21,53 +21,52 @@ const BalanceSummary = () => {
           where('userId', '==', auth.currentUser.uid)
         );
 
-        // Subscribe to changes in the balances collection
+    
         const unsubscribe = onSnapshot(balancesQuery, (snapshot) => {
           const balancesData = snapshot.docs.map(doc => doc.data());
           setBalances(balancesData);
         });
 
-        // Make sure to unsubscribe when the component is unmounted
+     
         return () => unsubscribe();
       } catch (error) {
         console.error('Error fetching balances:', error);
       }
     };
 
-    // Function to fetch the total expenses
+  
     const fetchExpensesTotal = async () => {
       try {
         const expensesQuery = query(
           collection(db, 'Despesas'),
-          where('paid', '==', true)
+          where('paid', '==', true),
+          where('userId', '==', auth.currentUser.uid) // Adiciona este filtro
         );
-
-        // Subscribe to changes in the expenses collection
+    
         const unsubscribe = onSnapshot(expensesQuery, (snapshot) => {
           const total = snapshot.docs.reduce(
             (acc, doc) => acc + parseFloat(doc.data().valor || 0),
             0
           );
-
+    
           setExpensesTotal(total);
         });
-
-        // Make sure to unsubscribe when the component is unmounted
+    
         return () => unsubscribe();
       } catch (error) {
         console.error('Error fetching expenses:', error);
       }
     };
 
-    // Execute the fetch functions
+
     fetchBalances();
     fetchExpensesTotal();
-  }, []); // Run once when the component is mounted
+  }, []);
 
-  // Calculate the total balance by summing the values of the balances
+ 
   const totalBalance = balances.reduce((acc, balance) => acc + parseFloat(balance.valor || 0), 0);
 
-  // Calculate the current balance by subtracting the total expenses from the total balance
+
   const currentBalance = totalBalance - expensesTotal;
 
   return (
@@ -86,10 +85,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 8,
+    fontWeight:700,
   },
   balanceText: {
     fontSize: 24,
     fontWeight: 'bold',
+    color:'#00FF7F'
   },
 });
 

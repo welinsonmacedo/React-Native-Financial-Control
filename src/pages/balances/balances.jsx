@@ -1,9 +1,13 @@
 import { Text, View, StyleSheet, Pressable } from 'react-native';
-import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
+
 import { useNavigation } from '@react-navigation/native';
+
+//Components//
 import CopyrightNotice from '../../components/Copyright/Copyright'
-
-
+import ButtonsAll from '../../components/Buttons/ButtonsALL';
+import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
+import BalanceScreen from '../../components/BalanceScreen/BalanceScreen';
+import Title from '../../components/Title/Title'
 const Balance = () => {
   const navigation = useNavigation();
 
@@ -16,59 +20,16 @@ const Balance = () => {
 
   return (
     <>
-      <View style={styles.ContainerHome}>
-        <Text style={styles.TextTitle}>Saldos </Text>
-      </View>
+      <HeaderTitle title='' />
+      <Title text={'Receitas'} />
+      <ButtonsAll onPress={handleAddBalancePress} title={'Lançar Saldo'} />
+      <ButtonsAll onPress={handleBalanceHistoryPress} title={'Historico saldos'} />
+      <BalanceScreen></BalanceScreen>
+      <CopyrightNotice></CopyrightNotice>
 
-      <View>
-        <Pressable
-          style={styles.button}
-          onPress={handleAddBalancePress}
-          role="button" // Adicionando role para acessibilidade
-        >
-          <Text style={styles.buttonText}>Lancar Saldo</Text>
-        </Pressable>
-        <Pressable
-          style={styles.button}
-          onPress={handleBalanceHistoryPress}
-          role="button" // Adicionando role para acessibilidade
-        >
-          <Text style={styles.buttonText}>Historico saldos</Text>
-        </Pressable>
-      </View>
-      <View>
-        <BalanceScreen></BalanceScreen>
-        <CopyrightNotice></CopyrightNotice>
-      </View>
     </>
   );
 };
 
-const styles = StyleSheet.create({
-  ContainerHome: {
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  TextTitle: {
-    fontWeight: '800',
-    color: '#fff',
-    fontSize: 30,
-    marginBottom: 10,
-    padding: 10,
-  },
-  button: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-});
 
 export default Balance;

@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { collection, getDocs, deleteDoc, doc, query, where } from 'firebase/firestore';
 import { db, auth } from '../../services/firebaseConfig';
+import DeleteButton from '../Buttons/DeleteButton';
+import HeaderTitle from '../HeaderTitle/HeaderTitle';
+import AlertModal from '../AlertModal/AlertModal'; 
+import Title from '../Title/Title'
+
+
 
 const BalanceHistory = () => {
   const [balances, setBalances] = useState([]);
+  const [showAlert, setShowAlert] = useState(false); 
+  const [alertMessage, setAlertMessage] = useState(''); 
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -26,7 +34,7 @@ const BalanceHistory = () => {
           ...doc.data(),
         }));
 
-        // Sort balances from most recent to oldest
+      
         const sortedBalances = userBalances.sort((a, b) => b.dataAtual - a.dataAtual);
         console.log(sortedBalances);
         setBalances(sortedBalances);
@@ -40,17 +48,21 @@ const BalanceHistory = () => {
 
   const handleDeleteBalance = async (balanceId) => {
     try {
-      const balanceRef = collection(db, 'Balance'); // Reference to the collection
-      const docRef = doc(balanceRef, balanceId); // Reference to the specific document
+      const balanceRef = collection(db, 'Balance'); 
+      const docRef = doc(balanceRef, balanceId); 
       await deleteDoc(docRef);
 
-      // Update the local state to reflect the deletion
+     
       setBalances((prevBalances) => prevBalances.filter((balance) => balance.id !== balanceId));
 
-      Alert.alert('Success', 'Balance deleted successfully!');
+     
+      setShowAlert(true);
+      setAlertMessage('Saldo excluído com sucesso!');
     } catch (error) {
       console.error('Error deleting balance:', error);
-      Alert.alert('Error', 'An error occurred while deleting the balance. Please try again.');
+    
+      setShowAlert(true);
+      setAlertMessage('Ocorreu um erro ao excluir o saldo. Por favor, tente novamente.');
     }
   };
 
@@ -61,38 +73,51 @@ const BalanceHistory = () => {
     }).format(item.valor);
 
     const formattedDate = new Date(item.data).toLocaleDateString('pt-BR');
-    console.log('Balance Item:', item); // Log balance data to the console
+    console.log('Balance Item:', item); 
     return (
-      <View style={styles.balanceItem}>
-        <Text>{`Data Atual: ${formattedDate}`}</Text>
+      <View style={styles.container}>
+        <Text>{`Data Lancamento: ${formattedDate}`}</Text>
         <Text>{`Descrição: ${item.descricao}`}</Text>
         <Text>{`Valor: ${formattedValue}`}</Text>
 
-        <TouchableOpacity
+        <DeleteButton 
           onPress={() => handleDeleteBalance(item.id)}
-          style={styles.deleteButton}
-        >
-          <Text>Delete Balance</Text>
-        </TouchableOpacity>
+        />
+       
       </View>
     );
   };
 
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={balances}
-        keyExtractor={(item) => item.id}
-        renderItem={renderBalanceItem}
-      />
-    </View>
+    <>
+      <Title text={'Historico de Saldos'}/>
+      <HeaderTitle title='' />
+      <View >
+        <FlatList
+          data={balances}
+          keyExtractor={(item) => item.id}
+          renderItem={renderBalanceItem}
+        />
+      </View>
+      
+      <AlertModal visible={showAlert} message={alertMessage} onClose={handleCloseAlert} />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     padding: 10,
+    alignItems:'center',
+    gap:20,
+    borderBottomWidth: 2,
+    borderBottomColor:'#000'
   },
   balanceItem: {
     borderWidth: 1,
