@@ -1,7 +1,7 @@
 This is a multiplatform web android app: Financial control app
 
 Technologies: ReactNative |  Expo | Firebase 
-
+Deploy :https://wmcontrolefinanceiro1-0.netlify.app/
 ![image](https://github.com/welinsonmacedo/React-Native-Financial-Control/assets/98168234/faa39ee7-524e-421b-a083-ec0ee67aac88)
 ![image](https://github.com/welinsonmacedo/React-Native-Financial-Control/assets/98168234/43c32977-fb1c-4237-8826-d7e93410a2f8)
 ![image](https://github.com/welinsonmacedo/React-Native-Financial-Control/assets/98168234/8ef772c4-82a7-4c56-9a75-52808836dfb1)
